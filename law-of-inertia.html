@@ -1,0 +1,706 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>電車の中でスマホを投げたらどう見える？</title>
+<style>
+:root{
+  --bg:#f4efe6;
+  --paper:#fdfaf3;
+  --ink:#1a1610;
+  --muted:#6a6058;
+  --line:#ddd0bb;
+  --blue:#3d78bc;  --s-blue:#e5eef9;
+  --green:#4a9462; --s-green:#e6f7ea;
+  --red:#c04848;   --s-red:#ffeaea;
+  --orange:#d96e3a;--s-orange:#fff0e2;
+  --dark:#231f1a;
+  --radius:16px;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{-webkit-text-size-adjust:100%}
+body{
+  font-family:system-ui,-apple-system,"Segoe UI",sans-serif;
+  background:
+    radial-gradient(circle at top left,#fff2cc 0,transparent 36%),
+    var(--bg);
+  color:var(--ink);
+  line-height:1.65;
+  padding:14px;
+}
+.wrap{max-width:860px;margin:0 auto;}
+
+/* ── HEADING ── */
+.page-head{margin-bottom:18px;}
+.page-head h1{font-size:clamp(1.1rem,4vw,1.45rem);line-height:1.35;margin-bottom:6px;}
+.page-lead{font-size:.92rem;color:var(--muted);font-weight:700;}
+
+/* ── CARDS ── */
+.card{
+  background:var(--paper);
+  border:1px solid var(--line);
+  border-radius:var(--radius);
+  padding:16px;
+  margin:12px 0;
+  box-shadow:0 4px 18px rgba(30,20,5,.07);
+}
+
+/* ── LABEL BADGES ── */
+.badge{
+  display:inline-block;
+  padding:3px 11px;border-radius:999px;
+  font-size:.78rem;font-weight:800;margin-bottom:10px;
+}
+.badge.dark  {background:var(--dark);color:#fef2de;}
+.badge.blue  {background:var(--s-blue);color:var(--blue);}
+.badge.green {background:var(--s-green);color:var(--green);}
+.badge.orange{background:var(--s-orange);color:var(--orange);}
+.badge.red   {background:var(--s-red);color:var(--red);}
+
+h2{font-size:1rem;line-height:1.45;margin:0 0 10px;}
+
+/* ── INFO BOXES ── */
+.box{
+  border-radius:12px;padding:11px 13px;
+  font-size:.9rem;font-weight:600;line-height:1.7;
+  border:1px solid var(--line);background:#fff;
+}
+.box + .box{margin-top:8px;}
+.box.good  {background:#eefbf2;border-color:#b4d9c0;color:#1d5232;}
+.box.bad   {background:#fff2f2;border-color:#e8b4b4;color:#7a2424;}
+.box.info  {background:#ecf5ff;border-color:#b8d4ee;color:#1e4a78;}
+.box.warn  {background:#fff5ec;border-color:#eecfac;color:#814e20;}
+.box.note  {background:#fafaf5;border-color:var(--line);color:var(--muted);font-size:.85rem;}
+
+/* ── TWO-COL GRID ── */
+.two{display:grid;gap:9px;margin-top:10px;}
+@media(min-width:600px){.two{grid-template-columns:1fr 1fr;}}
+
+/* ── SIM CONTAINER ── */
+.sim-wrap{
+  border:1px solid #e5dacc;
+  border-radius:14px;
+  overflow:hidden;
+  background:var(--paper);
+  margin-top:4px;
+}
+
+/* 上部コントロール */
+.sim-top{
+  padding:10px;
+  background:#faf5ec;
+  border-bottom:1px solid #e5dacc;
+}
+.btn-row{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:7px;
+}
+button{
+  width:100%;
+  border:1px solid var(--line);
+  background:#fff;
+  color:var(--ink);
+  border-radius:10px;
+  padding:9px 6px;
+  font-size:.88rem;font-weight:800;
+  cursor:pointer;
+  line-height:1.3;
+  touch-action:manipulation;
+  transition:background .15s,border-color .15s;
+}
+button small{display:block;color:var(--muted);font-size:.72rem;font-weight:600;margin-top:1px;}
+button.active{background:var(--dark);color:#fef2de;border-color:var(--dark);}
+button.active small{color:#ddc8a8;}
+button.go{background:var(--green);color:#fff;border-color:var(--green);}
+button.go:hover{background:#3e8055;}
+button.soft{color:var(--muted);}
+
+/* SVG ステージ */
+.sim-stage svg{display:block;width:100%;height:auto;background:#fffdf8;}
+
+/* 下部コントロール */
+.sim-bottom{
+  padding:10px;
+  background:#faf5ec;
+  border-top:1px solid #e5dacc;
+  display:grid;gap:8px;
+}
+@media(min-width:640px){
+  .sim-bottom{grid-template-columns:1fr 1fr;align-items:center;}
+}
+
+.range-row{
+  display:grid;
+  grid-template-columns:auto 1fr auto;
+  align-items:center;
+  gap:9px;
+  font-size:.82rem;color:var(--muted);font-weight:700;
+}
+input[type=range]{width:100%;accent-color:var(--dark);}
+
+/* 説明テーブル */
+.sim-info{
+  border-top:1px solid #e5dacc;
+  padding:11px 12px;
+  display:grid;gap:8px;
+  background:#fdfaf3;
+}
+@media(min-width:640px){.sim-info{grid-template-columns:1fr 1fr 1fr;}}
+.info-row{display:grid;grid-template-columns:52px 1fr;gap:6px;align-items:start;font-size:.86rem;}
+.info-row b{color:var(--dark);font-weight:800;}
+
+/* ── STEPS (なぜ？) ── */
+.steps{display:grid;gap:8px;margin-top:6px;}
+.step{
+  display:grid;grid-template-columns:32px 1fr;gap:10px;align-items:start;
+  padding:10px 12px;
+  border-radius:12px;
+  border:1px solid var(--line);background:#fff;
+}
+.step-num{
+  width:28px;height:28px;border-radius:50%;
+  background:var(--dark);color:#fef2de;
+  font-size:.82rem;font-weight:900;
+  display:flex;align-items:center;justify-content:center;
+  flex-shrink:0;
+}
+.step-text{font-size:.88rem;line-height:1.7;}
+.step-text b{font-weight:800;}
+
+/* ── MINI SVG ── */
+.mini-svg-wrap{
+  border:1px solid #e5dacc;
+  border-radius:12px;background:#fffdf8;
+  overflow:hidden;margin-top:10px;
+}
+.mini-svg-wrap svg{display:block;width:100%;height:auto;}
+
+/* ── BOTTOM NAV ── */
+.bottom-nav{
+  display:flex;
+  justify-content:flex-end;
+  margin:22px 0 6px;
+}
+
+.back-link{
+  position:relative;
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  gap:7px;
+  padding:11px 15px 11px 17px;
+  border:1px solid rgba(120,86,42,.34);
+  border-radius:999px;
+  background:
+    linear-gradient(135deg, rgba(255,250,238,.96), rgba(239,225,199,.92));
+  color:#5b4328;
+  font-size:.84rem;
+  font-weight:900;
+  letter-spacing:.02em;
+  text-decoration:none;
+  box-shadow:
+    0 8px 22px rgba(44,28,8,.13),
+    inset 0 1px 0 rgba(255,255,255,.75);
+  transition:transform .16s ease, box-shadow .16s ease, color .16s ease;
+}
+
+.back-link::before{
+  content:"✦";
+  font-size:.78rem;
+  color:#b8842c;
+  transform:translateY(-.5px);
+}
+
+.back-link::after{
+  content:"";
+  position:absolute;
+  inset:3px;
+  border-radius:999px;
+  border:1px solid rgba(255,255,255,.55);
+  pointer-events:none;
+}
+
+.back-link:hover{
+  color:#2d2117;
+  transform:translateY(-2px);
+  box-shadow:
+    0 12px 26px rgba(44,28,8,.17),
+    inset 0 1px 0 rgba(255,255,255,.82);
+}
+
+.back-link:active{
+  transform:translateY(0);
+}
+
+@media(max-width:430px){
+  .bottom-nav{
+    margin:18px 0 4px;
+  }
+
+  .back-link{
+    padding:10px 13px 10px 14px;
+    font-size:.8rem;
+  }
+}
+</style>
+</head>
+
+<body>
+<div class="wrap">
+
+  <div class="page-head">
+    <h1>電車の中でスマホを投げたらどう見える？</h1>
+    <p class="page-lead">慣性の話——投げても横向きの速さは消えない</p>
+  </div>
+
+  <!-- 結論 -->
+  <section class="card">
+    <span class="badge dark">結論から</span>
+    <h2>電車内で真上に投げたスマホは、車内から見るとほぼ同じ場所に戻ってくる</h2>
+    <div class="box good">
+      スマホを<strong>持っている時点で、スマホはすでに電車と同じ速さで横に動いています</strong>。<br>
+      上に投げるとは「上向きの速さを足すこと」であり、横向きの速さを消すことではありません。<br>
+      だから空中でも横に進み続け、手元に戻ってきます。
+    </div>
+  </section>
+
+  <!-- シミュレーション -->
+  <section class="card">
+    <span class="badge blue">操作して確認</span>
+    <h2>視点を切り替えて動きを見てみる</h2>
+
+    <div class="sim-wrap">
+
+      <!-- 視点切り替え -->
+      <div class="sim-top">
+        <div class="btn-row">
+          <button id="viewTrain" class="active">
+            車内視点
+            <small>→ 上下に動いて見える</small>
+          </button>
+          <button id="viewGround">
+            地面視点
+            <small>→ 山なりに飛んで見える</small>
+          </button>
+        </div>
+      </div>
+
+      <!-- SVGステージ -->
+      <div class="sim-stage">
+        <svg id="scene" viewBox="0 0 420 340" xmlns="http://www.w3.org/2000/svg">
+          <rect width="420" height="340" fill="#fffdf8"/>
+
+          <!-- グリッド（薄め） -->
+          <g stroke="#ede4d3" stroke-width="1">
+            <line x1="0" y1="80" x2="420" y2="80"/>
+            <line x1="0" y1="130" x2="420" y2="130"/>
+            <line x1="0" y1="180" x2="420" y2="180"/>
+          </g>
+
+          <!-- タイトル行 -->
+          <text id="svgTitle" x="16" y="26" font-size="14" font-weight="900" fill="#1a1610">一般ケース｜車内視点</text>
+          <text id="svgSub" x="16" y="45" font-size="11.5" font-weight="700" fill="#6a6058">スマホは投げる前から電車と同じ速さで横に動いている</text>
+
+          <!-- 地面線 -->
+          <line x1="0" y1="290" x2="420" y2="290" stroke="#c8bba8" stroke-width="3"/>
+          <!-- レール -->
+          <line x1="0" y1="298" x2="420" y2="298" stroke="#b8a898" stroke-width="2"/>
+          <line x1="0" y1="304" x2="420" y2="304" stroke="#b8a898" stroke-width="1.5"/>
+          <!-- まくら木 -->
+          <g stroke="#c0b099" stroke-width="3" stroke-linecap="round">
+            <line x1="30"  y1="296" x2="30"  y2="306"/>
+            <line x1="72"  y1="296" x2="72"  y2="306"/>
+            <line x1="114" y1="296" x2="114" y2="306"/>
+            <line x1="156" y1="296" x2="156" y2="306"/>
+            <line x1="198" y1="296" x2="198" y2="306"/>
+            <line x1="240" y1="296" x2="240" y2="306"/>
+            <line x1="282" y1="296" x2="282" y2="306"/>
+            <line x1="324" y1="296" x2="324" y2="306"/>
+            <line x1="366" y1="296" x2="366" y2="306"/>
+          </g>
+
+          <!-- 投げた瞬間の電車ゴースト（地面視点のみ表示） -->
+          <g id="ghostTrain" display="none" opacity="0.2">
+            <rect x="48" y="196" width="324" height="70" rx="14" fill="#d0e4f4" stroke="#7ea8c4" stroke-width="2"/>
+            <circle cx="110" cy="270" r="11" fill="#1a1610"/>
+            <circle cx="310" cy="270" r="11" fill="#1a1610"/>
+          </g>
+
+          <!-- 電車本体 -->
+          <g id="train">
+            <!-- 車体 -->
+            <rect x="48" y="196" width="324" height="70" rx="14" fill="#cfe3f2" stroke="#7099bc" stroke-width="2.5"/>
+            <!-- 屋根のライン -->
+            <rect x="48" y="196" width="324" height="10" rx="14" fill="#b8d0e8" stroke="none"/>
+            <!-- 窓 4つ -->
+            <rect x="64"  y="212" width="55" height="26" rx="5" fill="#e8f5ff" stroke="#7099bc" stroke-width="1.5"/>
+            <rect x="133" y="212" width="55" height="26" rx="5" fill="#e8f5ff" stroke="#7099bc" stroke-width="1.5"/>
+            <rect x="232" y="212" width="55" height="26" rx="5" fill="#e8f5ff" stroke="#7099bc" stroke-width="1.5"/>
+            <rect x="301" y="212" width="55" height="26" rx="5" fill="#e8f5ff" stroke="#7099bc" stroke-width="1.5"/>
+            <!-- ドア -->
+            <rect x="198" y="208" width="24" height="40" rx="3" fill="#b8d0e8" stroke="#7099bc" stroke-width="1.5"/>
+            <!-- 車輪 -->
+            <circle cx="110" cy="270" r="11" fill="#2a2420" stroke="#1a1610" stroke-width="1.5"/>
+            <circle cx="110" cy="270" r="4"  fill="#4a4040"/>
+            <circle cx="310" cy="270" r="11" fill="#2a2420" stroke="#1a1610" stroke-width="1.5"/>
+            <circle cx="310" cy="270" r="4"  fill="#4a4040"/>
+          </g>
+
+          <!-- 人物 -->
+          <g id="person">
+            <!-- 頭 -->
+            <circle cx="210" cy="235" r="11" fill="#d96e3a"/>
+            <!-- 体 -->
+            <line x1="210" y1="246" x2="210" y2="266" stroke="#d96e3a" stroke-width="5.5" stroke-linecap="round"/>
+            <!-- 腕（右腕を上に伸ばす：投げポーズ） -->
+            <line x1="210" y1="252" x2="226" y2="240" stroke="#d96e3a" stroke-width="5" stroke-linecap="round"/>
+            <line x1="210" y1="252" x2="196" y2="258" stroke="#d96e3a" stroke-width="5" stroke-linecap="round"/>
+            <!-- 足 -->
+            <line x1="210" y1="266" x2="198" y2="284" stroke="#d96e3a" stroke-width="5" stroke-linecap="round"/>
+            <line x1="210" y1="266" x2="222" y2="284" stroke="#d96e3a" stroke-width="5" stroke-linecap="round"/>
+          </g>
+
+          <!-- 軌跡 -->
+          <polyline id="pathLine" points="" fill="none"
+            stroke="#d96e3a" stroke-width="3.5"
+            stroke-dasharray="8 6" stroke-linecap="round"/>
+
+          <!-- スマホ -->
+          <g id="phone">
+            <rect x="-10" y="-20" width="20" height="40" rx="4.5"
+              fill="#1c2130" stroke="#0d0d14" stroke-width="1.5"/>
+            <rect x="-7"  y="-15" width="14" height="28" rx="2.5" fill="#5896d0"/>
+            <circle cx="0" cy="16" r="2.5" fill="#cce8ff"/>
+          </g>
+
+          <!-- 電車の速度矢印（地面視点のみ） -->
+          <g id="arrowTrain" display="none">
+            <line x1="272" y1="70" x2="388" y2="70" stroke="#3d78bc" stroke-width="5" stroke-linecap="round"/>
+            <polygon points="388,70 366,59 366,81" fill="#3d78bc"/>
+            <text x="270" y="58" font-size="12" font-weight="900" fill="#3d78bc">電車の進む向き</text>
+          </g>
+
+          <!-- 共通速度矢印（常時） -->
+          <g id="arrowCommon">
+            <line x1="56" y1="322" x2="330" y2="322" stroke="#4a9462" stroke-width="5" stroke-linecap="round"/>
+            <polygon points="330,322 308,311 308,333" fill="#4a9462"/>
+            <text id="arrowLabel" x="76" y="337" font-size="11.5" font-weight="900" fill="#4a9462">スマホも電車と同じ横向き速度を持っている</text>
+          </g>
+
+        </svg>
+      </div>
+
+      <!-- 再生コントロール -->
+      <div class="sim-bottom">
+        <div class="btn-row">
+          <button id="play" class="go">再生</button>
+          <button id="reset" class="soft">リセット</button>
+        </div>
+        <div class="range-row">
+          <span>投げる強さ</span>
+          <input id="power" type="range" min="90" max="200" value="155">
+          <span id="powerVal">大</span>
+        </div>
+      </div>
+
+      <!-- 説明行 -->
+      <div class="sim-info">
+        <div class="info-row" id="caseLine">
+          <b>前提</b>
+          <span>スマホは投げる前から横に動いている</span>
+        </div>
+        <div class="info-row" id="trainLine">
+          <b>車内</b>
+          <span>上下に動くだけに見える</span>
+        </div>
+        <div class="info-row" id="groundLine">
+          <b>地面</b>
+          <span>山なりに進んで見える</span>
+        </div>
+      </div>
+
+    </div><!-- /sim-wrap -->
+
+    <div class="box note" style="margin-top:10px;">
+      ※ 動きは見やすくするために誇張しています。重要なのは「横向きの速さが空中でも消えない」という点です。
+    </div>
+  </section>
+
+  <!-- なぜそうなるの？ -->
+  <section class="card">
+    <span class="badge green">なぜそうなるの？</span>
+    <h2>3ステップで理解する</h2>
+    <div class="steps">
+      <div class="step">
+        <div class="step-num">1</div>
+        <div class="step-text">
+          <b>投げる前からスマホは動いている</b><br>
+          電車に乗っている時点で、人もスマホも電車と一緒に秒速〜十数m で横に進んでいます。
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">2</div>
+        <div class="step-text">
+          <b>「上に投げる」＝横の動きをやめることではない</b><br>
+          上に投げるとは「上向きの力を加えること」です。もともとあった横向きの速さはそのまま残ります。
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">3</div>
+        <div class="step-text">
+          <b>車内と地面では「見え方」が変わるだけで、物理は同じ</b><br>
+          車内視点では上下運動だけ、地面視点では山なりの放物線——どちらの説明も正しく、観察する側の基準（参照系）が違うだけです。
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 視点の比較 -->
+  <section class="card">
+    <span class="badge orange">視点の比較</span>
+    <h2>同じ動きが視点によってどう変わるか</h2>
+
+    <div class="mini-svg-wrap">
+      <svg viewBox="0 0 420 220" xmlns="http://www.w3.org/2000/svg">
+        <rect width="420" height="220" fill="#fffdf8"/>
+
+        <!-- 左：車内視点 -->
+        <text x="44"  y="22" font-size="12" font-weight="800" fill="#1a1610">車内視点</text>
+        <text x="22"  y="38" font-size="10" font-weight="600" fill="#6a6058">電車は止まって見える</text>
+
+        <!-- 電車（左） -->
+        <rect x="18" y="48" width="174" height="54" rx="10" fill="#cfe3f2" stroke="#7099bc" stroke-width="2"/>
+        <rect x="30" y="58" width="36" height="18" rx="4" fill="#e8f5ff" stroke="#7099bc" stroke-width="1.2"/>
+        <rect x="78" y="58" width="36" height="18" rx="4" fill="#e8f5ff" stroke="#7099bc" stroke-width="1.2"/>
+        <rect x="128" y="58" width="36" height="18" rx="4" fill="#e8f5ff" stroke="#7099bc" stroke-width="1.2"/>
+        <circle cx="56"  cy="104" r="8" fill="#2a2420"/>
+        <circle cx="154" cy="104" r="8" fill="#2a2420"/>
+
+        <!-- 人物（左） -->
+        <circle cx="105" cy="70"  r="7" fill="#d96e3a"/>
+        <line x1="105" y1="77"  x2="105" y2="92"  stroke="#d96e3a" stroke-width="4" stroke-linecap="round"/>
+        <line x1="105" y1="83"  x2="117" y2="77"  stroke="#d96e3a" stroke-width="3.5" stroke-linecap="round"/>
+        <line x1="105" y1="83"  x2="95"  y2="85"  stroke="#d96e3a" stroke-width="3.5" stroke-linecap="round"/>
+        <line x1="105" y1="92"  x2="99"  y2="104" stroke="#d96e3a" stroke-width="3.5" stroke-linecap="round"/>
+        <line x1="105" y1="92"  x2="111" y2="104" stroke="#d96e3a" stroke-width="3.5" stroke-linecap="round"/>
+
+        <!-- 軌跡（左：縦の楕円） -->
+        <ellipse cx="108" cy="70" rx="7" ry="30"
+          fill="none" stroke="#d96e3a" stroke-width="2.5" stroke-dasharray="7 5" opacity=".7"/>
+
+        <text x="82" y="128" font-size="10.5" font-weight="800" fill="#4a9462">上下に動いて見える</text>
+
+        <!-- 仕切り線 -->
+        <line x1="210" y1="14" x2="210" y2="150" stroke="#ddd0bb" stroke-width="1.5" stroke-dasharray="4 3"/>
+
+        <!-- 右：地面視点 -->
+        <text x="264" y="22" font-size="12" font-weight="800" fill="#1a1610">地面視点</text>
+        <text x="222" y="38" font-size="10" font-weight="600" fill="#6a6058">電車が進んで見える</text>
+
+        <!-- ゴースト電車（右） -->
+        <rect x="224" y="68" width="174" height="54" rx="10" fill="#cfe3f2" stroke="#7099bc" stroke-width="2" opacity=".28"/>
+        <circle cx="262" cy="124" r="8" fill="#2a2420" opacity=".28"/>
+        <circle cx="360" cy="124" r="8" fill="#2a2420" opacity=".28"/>
+
+        <!-- 現在の電車（右、やや右に） -->
+        <rect x="250" y="68" width="174" height="54" rx="10" fill="#cfe3f2" stroke="#7099bc" stroke-width="2"/>
+        <rect x="262" y="78" width="36" height="18" rx="4" fill="#e8f5ff" stroke="#7099bc" stroke-width="1.2"/>
+        <rect x="310" y="78" width="36" height="18" rx="4" fill="#e8f5ff" stroke="#7099bc" stroke-width="1.2"/>
+        <rect x="360" y="78" width="24" height="18" rx="4" fill="#e8f5ff" stroke="#7099bc" stroke-width="1.2"/>
+        <circle cx="288" cy="124" r="8" fill="#2a2420"/>
+        <circle cx="386" cy="124" r="8" fill="#2a2420"/>
+
+        <!-- 放物線軌跡（右） -->
+        <path d="M230 112 Q300 42 370 112"
+          fill="none" stroke="#d96e3a" stroke-width="2.5" stroke-dasharray="7 5" opacity=".85"/>
+
+        <!-- 電車矢印（右） -->
+        <line x1="234" y1="152" x2="384" y2="152" stroke="#3d78bc" stroke-width="4" stroke-linecap="round"/>
+        <polygon points="384,152 364,143 364,161" fill="#3d78bc"/>
+
+        <text x="230" y="170" font-size="10.5" font-weight="800" fill="#3d78bc">山なりに前へ進んで見える</text>
+
+        <!-- 共通ラベル -->
+        <rect x="30" y="176" width="360" height="36" rx="9" fill="#e8f7ea" stroke="#a8d4b0" stroke-width="1.2"/>
+        <text x="210" y="199" text-anchor="middle" font-size="11" font-weight="800" fill="#3a7850">どちらも正しい——「何を基準に見るか」が違うだけ</text>
+      </svg>
+    </div>
+  </section>
+
+  <!-- 前回説明した時の誤り -->
+  <section class="card">
+    <span class="badge red">前回説明した時の誤り</span>
+    <h2>スケボーの説明は、特殊ケースとして考えてしまっていた</h2>
+
+    <div class="box warn">
+  直前に、光速度不変の原理の説明として「高速道路の反対車線の車は速く見えるが、光の速さは観測者によらず一定として扱われる」という話をしていました。<br>
+  その流れで、今回も「誰から見て静止しているのか」「どの基準で動いているのか」を問う問題だと受け取っていました。<br>
+  そのため、スマホが電車の横向き速度を持たないまま、魔法のように地面基準で空中に静止し、そこから下へ落下する特殊ケースを想定していました。<br>
+  この前提では、地面から見るとスマホはほぼ真下に落ち、車内から見ると後ろへ流れながら落ちるように見えます。
+</div>
+
+<div class="box info" style="margin-top:8px;">
+  ただし、一般的な電車内の問題では、スマホは投げる前から電車と同じ横向き速度を持っているため、この想定は問題設定としてはズレていました。
+</div>
+
+    <div class="two">
+      <div class="box bad">
+        <strong>前回のスケボー説明</strong><br>
+        「ボードだけが前に進み、人や物体が置いていかれる」という説明は、人や物体が最初からボードの横向き速度を持っていない、または横向き速度を共有していない特殊ケースには近いです。
+      </div>
+
+      <div class="box good">
+        <strong>一般ケースでのスケボー説明</strong><br>
+        普通にスケボーに乗って進んでいる人は、ジャンプ前からボードと同じ横向き速度を持っています。<br>
+        そのため、真上にジャンプしても、空中で横向きの速さは消えず、理想的にはボードの近くに戻ります。
+      </div>
+    </div>
+
+    <nav class="bottom-nav" aria-label="ページ移動">
+    <a href="index.html" class="back-link">禁書の部屋に戻る</a>
+  </nav>
+  </section>
+
+  <!-- /wrap -->
+
+<script>
+(function(){
+'use strict';
+
+var els={
+  viewTrain:document.getElementById('viewTrain'),
+  viewGround:document.getElementById('viewGround'),
+  play:document.getElementById('play'),
+  reset:document.getElementById('reset'),
+  power:document.getElementById('power'),
+  powerVal:document.getElementById('powerVal'),
+  svgTitle:document.getElementById('svgTitle'),
+  svgSub:document.getElementById('svgSub'),
+  ghostTrain:document.getElementById('ghostTrain'),
+  train:document.getElementById('train'),
+  person:document.getElementById('person'),
+  phone:document.getElementById('phone'),
+  pathLine:document.getElementById('pathLine'),
+  arrowTrain:document.getElementById('arrowTrain'),
+  arrowCommon:document.getElementById('arrowCommon'),
+  arrowLabel:document.getElementById('arrowLabel'),
+  caseLine:document.getElementById('caseLine'),
+  trainLine:document.getElementById('trainLine'),
+  groundLine:document.getElementById('groundLine')
+};
+
+var view='train';
+var progress=0;
+var playing=false;
+var raf=null;
+var last=null;
+
+function movePx(){return Number(els.power.value)*1.35;}
+var HEIGHT=115;
+
+function getState(p){
+  var baseX=210,baseY=240;
+  var move=movePx()*p;
+  var y=baseY-HEIGHT*Math.sin(Math.PI*p);
+  var phoneX,trainX;
+  if(view==='train'){
+    trainX=0;phoneX=baseX;
+  }else{
+    trainX=move;phoneX=baseX+move;
+  }
+  return {phoneX:phoneX,y:y,trainX:trainX};
+}
+
+function buildPath(){
+  var pts=[];
+  var steps=Math.max(2,Math.floor(progress*50));
+  for(var i=0;i<=steps;i++){
+    var p=steps===0?0:progress*i/steps;
+    var s=getState(p);
+    pts.push(s.phoneX.toFixed(1)+','+s.y.toFixed(1));
+  }
+  return pts.join(' ');
+}
+
+function updatePowerLabel(){
+  var v=Number(els.power.value);
+  els.powerVal.textContent=v<115?'中':v<165?'大':'特大';
+}
+
+function renderText(){
+  els.viewTrain.classList.toggle('active',view==='train');
+  els.viewGround.classList.toggle('active',view==='ground');
+  var vn=view==='train'?'車内視点':'地面視点';
+  els.svgTitle.textContent='一般ケース｜'+vn;
+  if(view==='train'){
+    els.svgSub.textContent='車内視点：横の速さが共通なので上下にしか見えない';
+    els.caseLine.innerHTML='<b>前提</b><span>スマホは投げる前から横に動いている</span>';
+    els.trainLine.innerHTML='<b>車内</b><span>上下に動くだけに見える</span>';
+    els.groundLine.innerHTML='<b>地面</b><span>→ 地面視点に切り替えると山なりに見える</span>';
+    els.arrowLabel.textContent='スマホも電車と同じ横向き速度を持っている';
+  }else{
+    els.svgSub.textContent='地面視点：スマホは山なりに前へ飛んでいる';
+    els.caseLine.innerHTML='<b>前提</b><span>投げる前から電車と同じ速さで進んでいる</span>';
+    els.trainLine.innerHTML='<b>車内</b><span>→ 車内視点に戻すと上下だけに見える</span>';
+    els.groundLine.innerHTML='<b>地面</b><span>山なりの放物線を描いて進む</span>';
+    els.arrowLabel.textContent='スマホも電車と同じ方向・速さで飛んでいく';
+  }
+}
+
+function renderScene(){
+  var s=getState(progress);
+  els.train.setAttribute('transform','translate('+s.trainX+',0)');
+  els.person.setAttribute('transform','translate('+s.trainX+',0)');
+  els.ghostTrain.setAttribute('display',view==='ground'?'block':'none');
+  els.phone.setAttribute('transform','translate('+s.phoneX+','+s.y+') rotate(-4)');
+  els.pathLine.setAttribute('points',buildPath());
+  els.arrowTrain.setAttribute('display',view==='ground'?'block':'none');
+  renderText();
+}
+
+function doReset(){
+  playing=false;progress=0;last=null;
+  els.play.textContent='再生';els.play.className='go';
+  if(raf)cancelAnimationFrame(raf);
+  renderScene();
+}
+
+function animate(ts){
+  if(!playing)return;
+  if(last===null)last=ts;
+  var delta=(ts-last)/1000;last=ts;
+  progress+=delta/1.5;
+  if(progress>=1){
+    progress=1;playing=false;
+    els.play.textContent='再生';els.play.className='go';
+    renderScene();return;
+  }
+  renderScene();
+  raf=requestAnimationFrame(animate);
+}
+
+els.viewTrain.addEventListener('click',function(){view='train';doReset();});
+els.viewGround.addEventListener('click',function(){view='ground';doReset();});
+
+els.play.addEventListener('click',function(){
+  if(playing){
+    playing=false;els.play.textContent='再生';els.play.className='go';
+    if(raf)cancelAnimationFrame(raf);return;
+  }
+  if(progress>=1)progress=0;
+  playing=true;last=null;
+  els.play.textContent='停止';els.play.className='';
+  raf=requestAnimationFrame(animate);
+});
+
+els.reset.addEventListener('click',doReset);
+els.power.addEventListener('input',function(){updatePowerLabel();doReset();});
+
+updatePowerLabel();
+renderScene();
+})();
+</script>
+</body>
+</html>
