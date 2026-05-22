@@ -4,327 +4,200 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>禁書の部屋 β</title>
-<meta name="description" content="秘密の書庫。表には出ない知識の断片。">
+<meta name="description" content="秘密の勉強部屋。物理・心理・制作の記録。">
 <meta name="theme-color" content="#07060f">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700;900&display=swap" rel="stylesheet">
 <style>
 :root{
   --bg:#07060f;
-  --surface:#0d0b1a;
-  --gold:#c9a96e;
-  --gold-dim:rgba(201,169,110,.5);
-  --gold-border:rgba(201,169,110,.22);
-  --gold-glow:rgba(201,169,110,.1);
-  --gold-hover:rgba(201,169,110,.38);
-  --ivory:#e8e0d2;
-  --muted:rgba(232,224,210,.42);
-  --muted2:rgba(232,224,210,.24);
-  --blue-tag:rgba(68,128,210,.2);
-  --blue-txt:#7aaae0;
-  --purple-tag:rgba(170,100,230,.18);
-  --purple-txt:#c088e8;
-  --mono-tag:rgba(232,224,210,.08);
-  --mono-txt:rgba(232,224,210,.45);
-  --green-ok:rgba(80,180,110,.15);
-  --green-txt:#82c89a;
+  --gold:#d4b06a;
+  --gold-border:rgba(212,176,106,.28);
+  --gold-hover:rgba(212,176,106,.52);
+  --ivory:#f0e8d8;
+  --body:#cec4b2;
+  --sub:#957e64;
+  --card:rgba(255,255,255,.04);
+  --card-hover:rgba(212,176,106,.06);
+  --line:rgba(212,176,106,.18);
+  --blue-bg:rgba(80,140,220,.18);--blue:#90bce8;
+  --purple-bg:rgba(160,90,220,.18);--purple:#c090e8;
+  --mono-bg:rgba(240,232,216,.07);--mono:#9a8878;
+  --green-bg:rgba(80,180,110,.14);--green:#88c898;
+  --beta-bg:rgba(190,52,52,.72);
 }
-
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 html{scroll-behavior:smooth}
 body{
   font-family:"Noto Sans JP",system-ui,sans-serif;
-  background:var(--bg);
-  color:var(--ivory);
-  min-height:100vh;
-  overflow-x:hidden;
+  background:var(--bg);color:var(--body);
+  min-height:100vh;overflow-x:hidden;
   -webkit-font-smoothing:antialiased;
 }
 a{color:inherit;text-decoration:none}
-button{font-family:inherit;cursor:pointer}
+button{font-family:inherit;cursor:pointer;border:none;background:none}
 
-/* ── STARS CANVAS ── */
-#starsBg{
-  position:fixed;inset:0;
-  pointer-events:none;
-  z-index:0;
-  opacity:.65;
-}
-
-/* ── NEBULA BG ── */
+/* nebula bg */
 body::before{
-  content:"";
-  position:fixed;inset:0;
+  content:"";position:fixed;inset:0;pointer-events:none;z-index:0;
   background:
-    radial-gradient(ellipse 70% 50% at 20% 80%, rgba(60,30,120,.18) 0%, transparent 70%),
-    radial-gradient(ellipse 50% 40% at 80% 20%, rgba(30,60,120,.12) 0%, transparent 65%),
-    radial-gradient(ellipse 80% 60% at 50% 50%, rgba(40,20,80,.1) 0%, transparent 80%);
-  pointer-events:none;
-  z-index:0;
+    radial-gradient(ellipse 65% 45% at 12% 88%,rgba(48,22,108,.22),transparent 70%),
+    radial-gradient(ellipse 50% 38% at 88% 12%,rgba(22,46,108,.15),transparent 65%);
 }
 
-/* ── SPLASH ── */
+/* stars */
+#sky{position:fixed;inset:0;pointer-events:none;z-index:0;opacity:.65;}
+
+/* moon — fixed top-right */
+.moon{
+  position:fixed;top:20px;right:20px;z-index:2;pointer-events:none;
+  width:44px;height:44px;
+  opacity:.5;
+  filter:drop-shadow(0 0 14px rgba(212,176,106,.55));
+  animation:mglow 5s ease-in-out infinite;
+}
+@keyframes mglow{
+  0%,100%{opacity:.48;filter:drop-shadow(0 0 10px rgba(212,176,106,.4));}
+  50%{opacity:.65;filter:drop-shadow(0 0 22px rgba(212,176,106,.7));}
+}
+
+/* ─── SPLASH ─── */
 .spl{
   position:fixed;inset:0;z-index:9999;
   display:flex;flex-direction:column;align-items:center;justify-content:center;
-  gap:24px;
-  padding:40px 24px 64px;
-  background:radial-gradient(ellipse 80% 70% at 50% 55%, #14103a 0%, #07060f 72%);
-  cursor:pointer;
-  text-align:center;
+  gap:22px;padding:40px 24px 64px;
+  background:radial-gradient(ellipse 90% 75% at 50% 55%,#160f38 0%,#07060f 72%);
+  cursor:pointer;text-align:center;
   transition:opacity .55s ease;
 }
-
-/* 外側の大きい輪 */
-.spl-ring{
-  width:110px;height:110px;
-  border-radius:50%;
-  border:1px solid var(--gold-border);
-  display:flex;align-items:center;justify-content:center;
-  position:relative;
-  box-shadow:0 0 40px rgba(201,169,110,.12),inset 0 0 20px rgba(201,169,110,.04);
-  animation:ring-breath 5s ease-in-out infinite;
-}
-.spl-ring::before{
-  content:"";position:absolute;
-  inset:10px;border-radius:50%;
-  border:1px solid rgba(201,169,110,.1);
-}
-.spl-ring::after{
-  content:"";position:absolute;
-  inset:22px;border-radius:50%;
-  border:1px dashed rgba(201,169,110,.1);
-  animation:ring-spin 30s linear infinite;
-}
-@keyframes ring-breath{
-  0%,100%{box-shadow:0 0 40px rgba(201,169,110,.12),inset 0 0 20px rgba(201,169,110,.04);}
-  50%{box-shadow:0 0 60px rgba(201,169,110,.22),inset 0 0 30px rgba(201,169,110,.08);}
-}
-@keyframes ring-spin{from{transform:rotate(0deg)}to{transform:rotate(360deg)}}
-
-.spl-icon{font-size:2rem;line-height:1;position:relative;z-index:1;}
-
-.spl-eyebrow{
-  font-size:.62rem;letter-spacing:.42em;
-  color:var(--gold);opacity:.6;
-  text-transform:uppercase;
-}
-
-.spl-h{
-  font-size:clamp(2.6rem,8vw,4rem);
-  font-weight:900;letter-spacing:.08em;line-height:1;
-  color:var(--ivory);
-}
-
+.spl-moon{font-size:3.4rem;line-height:1;filter:drop-shadow(0 0 22px rgba(212,176,106,.6));animation:mglow 4s ease-in-out infinite;}
+.spl-eyebrow{font-size:.62rem;letter-spacing:.42em;color:var(--gold);opacity:.65;text-transform:uppercase;}
+.spl-h{font-size:clamp(2.6rem,8vw,4rem);font-weight:900;letter-spacing:.08em;line-height:1;color:var(--ivory);}
 .spl-beta{
-  display:inline-block;
-  font-size:.5em;font-weight:900;letter-spacing:.15em;
-  color:#fff;
-  background:rgba(190,55,55,.75);
-  border:1px solid rgba(210,80,80,.5);
-  padding:2px 7px;border-radius:3px;
-  vertical-align:super;margin-left:4px;
-  text-transform:uppercase;
+  display:inline-block;vertical-align:super;margin-left:5px;
+  font-size:.44em;font-weight:900;letter-spacing:.14em;
+  color:#fff;background:var(--beta-bg);
+  border:1px solid rgba(210,78,78,.48);
+  padding:2px 7px;border-radius:3px;text-transform:uppercase;
 }
-
-.spl-copy{
-  font-size:.85rem;color:var(--muted);
-  line-height:1.95;max-width:320px;
-  white-space:pre-line;
-}
-
+.spl-copy{font-size:.86rem;color:var(--sub);line-height:2;max-width:300px;white-space:pre-line;}
 .spl-btn{
   appearance:none;
-  border:1px solid var(--gold-border);
-  background:rgba(201,169,110,.07);
-  color:var(--gold);
-  padding:13px 40px;
-  font-size:.88rem;font-weight:700;letter-spacing:.25em;
-  border-radius:2px;
-  position:relative;overflow:hidden;
+  border:1px solid var(--gold-border);background:rgba(212,176,106,.07);
+  color:var(--gold);padding:13px 42px;
+  font-size:.88rem;font-weight:700;letter-spacing:.24em;
+  border-radius:2px;position:relative;overflow:hidden;
   transition:background .22s,border-color .22s,box-shadow .22s;
 }
 .spl-btn::after{
   content:"";position:absolute;inset:0;
-  background:linear-gradient(90deg,transparent,rgba(201,169,110,.1),transparent);
-  transform:translateX(-100%);
-  transition:transform .6s ease;
+  background:linear-gradient(90deg,transparent,rgba(212,176,106,.13),transparent);
+  transform:translateX(-100%);transition:transform .6s ease;
 }
-.spl-btn:hover{
-  background:rgba(201,169,110,.13);
-  border-color:rgba(201,169,110,.5);
-  box-shadow:0 0 24px rgba(201,169,110,.16);
-}
+.spl-btn:hover{background:rgba(212,176,106,.14);border-color:var(--gold-hover);box-shadow:0 0 24px rgba(212,176,106,.18);}
 .spl-btn:hover::after{transform:translateX(100%);}
+.spl-hint{font-size:.62rem;color:rgba(212,176,106,.28);letter-spacing:.22em;margin-top:-8px;}
 
-.spl-hint{
-  font-size:.63rem;color:var(--muted2);
-  letter-spacing:.2em;margin-top:-8px;
-}
-
-/* ── MAIN ── */
+/* ─── WRAP ─── */
 .wrap{
-  position:relative;z-index:1;
-  max-width:860px;margin:0 auto;
-  padding:0 18px max(64px,env(safe-area-inset-bottom));
+  position:relative;z-index:1;max-width:820px;margin:0 auto;
+  padding:0 20px max(72px,env(safe-area-inset-bottom));
   opacity:0;transition:opacity .5s ease;
 }
 .wrap.show{opacity:1}
 
-/* ── TOPBAR ── */
+/* ─── TOPBAR ─── */
 .topbar{
   display:flex;align-items:flex-end;justify-content:space-between;
-  padding:28px 0 22px;
-  border-bottom:1px solid var(--gold-border);
-  margin-bottom:36px;gap:14px;
+  padding:30px 0 22px;border-bottom:1px solid var(--line);margin-bottom:40px;gap:14px;
 }
 .tb-eyebrow{
-  font-size:.61rem;letter-spacing:.4em;
-  color:var(--gold);opacity:.6;
-  text-transform:uppercase;
-  display:flex;align-items:center;gap:10px;
-  margin-bottom:10px;
+  font-size:.61rem;letter-spacing:.4em;color:var(--gold);opacity:.65;
+  text-transform:uppercase;display:flex;align-items:center;gap:10px;margin-bottom:10px;
 }
-.tb-eyebrow::before{content:"";width:18px;height:1px;background:var(--gold-dim);}
+.tb-eyebrow::before{content:"";width:16px;height:1px;background:rgba(212,176,106,.4);}
 .tb-name{
-  font-size:clamp(1.9rem,5.5vw,3rem);
-  font-weight:900;letter-spacing:.08em;line-height:1;
-  background:linear-gradient(110deg,#e8e0d2 0%,var(--gold) 38%,#e8e0d2 68%,#c4b898 100%);
+  font-size:clamp(1.9rem,5.5vw,3rem);font-weight:900;letter-spacing:.08em;line-height:1;
+  background:linear-gradient(110deg,var(--ivory) 0%,var(--gold) 38%,var(--ivory) 68%,#c8ad86 100%);
   background-size:230% 100%;
   -webkit-background-clip:text;background-clip:text;color:transparent;
-  animation:gold-sh 7s ease-in-out infinite;
+  animation:gsh 8s ease-in-out infinite;
 }
-@keyframes gold-sh{0%,100%{background-position:100% 0}50%{background-position:0% 0}}
+@keyframes gsh{0%,100%{background-position:100% 0}50%{background-position:0% 0}}
 .tb-beta{
-  display:inline-block;
-  font-size:.48em;font-weight:900;letter-spacing:.14em;
-  color:#fff;
-  background:rgba(190,55,55,.72);
-  border:1px solid rgba(210,80,80,.45);
-  padding:2px 6px;border-radius:3px;
-  text-transform:uppercase;vertical-align:middle;margin-left:5px;
+  display:inline-block;vertical-align:middle;margin-left:5px;
+  font-size:.44em;font-weight:900;letter-spacing:.14em;
+  color:#fff;background:var(--beta-bg);border:1px solid rgba(210,78,78,.42);
+  padding:2px 6px;border-radius:3px;text-transform:uppercase;
 }
-.tb-sub{
-  font-size:.74rem;color:var(--muted);
-  margin-top:7px;letter-spacing:.04em;
-}
+.tb-sub{font-size:.76rem;color:var(--sub);margin-top:7px;letter-spacing:.03em;}
 .tb-back{
-  font-size:.71rem;color:var(--muted);
-  letter-spacing:.06em;
+  font-size:.72rem;color:var(--sub);
   display:flex;align-items:center;gap:5px;
-  border:1px solid rgba(232,224,210,.1);
-  padding:8px 14px;border-radius:4px;
-  flex-shrink:0;white-space:nowrap;
-  transition:color .2s,border-color .2s;
+  border:1px solid rgba(240,232,216,.1);padding:8px 14px;border-radius:4px;
+  flex-shrink:0;white-space:nowrap;transition:color .2s,border-color .2s;
 }
-.tb-back:hover{color:var(--ivory);border-color:rgba(232,224,210,.22);}
+.tb-back:hover{color:var(--ivory);border-color:rgba(240,232,216,.24);}
 
-/* ── SECTION HEAD ── */
-.sec-h{
-  display:flex;align-items:center;gap:14px;
-  margin-bottom:20px;
-}
+/* ─── SECTION HEADING ─── */
+.sec-h{display:flex;align-items:center;gap:14px;margin-bottom:20px;}
 .sec-h-text{
-  font-size:.62rem;font-weight:700;letter-spacing:.4em;
-  color:var(--gold);opacity:.65;
-  text-transform:uppercase;white-space:nowrap;
+  font-size:.63rem;font-weight:700;letter-spacing:.38em;
+  color:var(--gold);opacity:.7;text-transform:uppercase;white-space:nowrap;
 }
-.sec-h-line{
-  flex:1;height:1px;
-  background:linear-gradient(90deg,var(--gold-border),transparent);
-}
+.sec-h-line{flex:1;height:1px;background:linear-gradient(90deg,var(--line),transparent);}
 
-/* ── ENTRIES ── */
-.catalog{display:flex;flex-direction:column;gap:16px;margin-bottom:52px;}
+/* ─── ENTRY ─── */
+.catalog{display:flex;flex-direction:column;gap:14px;margin-bottom:52px;}
 .coming{display:flex;flex-direction:column;gap:12px;margin-bottom:52px;}
 
 .entry{
-  display:grid;
-  grid-template-columns:1fr auto;
-  gap:12px 18px;
-  align-items:center;
-  background:rgba(201,169,110,.035);
-  border:1px solid var(--gold-border);
-  border-radius:10px;
-  padding:22px 20px 20px;
-  text-decoration:none;color:inherit;
-  position:relative;
+  display:grid;grid-template-columns:1fr auto;gap:10px 16px;align-items:center;
+  background:var(--card);border:1px solid var(--line);border-radius:10px;
+  padding:20px 20px 18px;position:relative;
   transition:background .22s,border-color .25s,box-shadow .25s;
 }
-.entry.link:hover{
-  background:rgba(201,169,110,.07);
-  border-color:var(--gold-hover);
-  box-shadow:0 0 28px rgba(201,169,110,.08),0 0 0 1px rgba(201,169,110,.1) inset;
+a.entry:hover{
+  background:var(--card-hover);border-color:var(--gold-hover);
+  box-shadow:0 0 28px rgba(212,176,106,.07),0 0 0 1px rgba(212,176,106,.08) inset;
 }
-.entry.sealed{
-  opacity:.52;pointer-events:none;
-}
-/* 横線の装飾 */
+.entry.sealed{opacity:.48;pointer-events:none;}
 .entry::before{
-  content:"";position:absolute;
-  top:0;left:20px;right:20px;height:1px;
-  background:linear-gradient(90deg,transparent,rgba(201,169,110,.18),transparent);
-  border-radius:1px;
+  content:"";position:absolute;top:0;left:18px;right:18px;height:1px;
+  background:linear-gradient(90deg,transparent,rgba(212,176,106,.18),transparent);
 }
 
 .e-inner{grid-column:1;}
-
-.e-meta{
-  display:flex;align-items:center;gap:10px;
-  margin-bottom:9px;
-}
-.e-no{
-  font-size:.59rem;font-weight:700;letter-spacing:.22em;
-  color:var(--gold);opacity:.6;
-}
-.e-tag{
-  font-size:.61rem;font-weight:700;
-  padding:2px 9px;border-radius:3px;letter-spacing:.08em;
-  text-transform:uppercase;
-}
-.e-tag.phys{background:var(--blue-tag);color:var(--blue-txt);}
-.e-tag.cbt{background:var(--purple-tag);color:var(--purple-txt);}
-.e-tag.meta{background:var(--mono-tag);color:var(--mono-txt);}
+.e-meta{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:9px;}
+.e-date{font-size:.67rem;color:var(--sub);letter-spacing:.04em;}
+.e-tag{font-size:.63rem;font-weight:700;padding:2px 9px;border-radius:3px;letter-spacing:.06em;}
+.e-tag.phys{background:var(--blue-bg);color:var(--blue);}
+.e-tag.cbt{background:var(--purple-bg);color:var(--purple);}
+.e-tag.meta{background:var(--mono-bg);color:var(--mono);}
 
 .e-title{
-  font-size:1.04rem;font-weight:700;
-  color:var(--ivory);line-height:1.45;
-  margin-bottom:7px;
+  font-size:1.02rem;font-weight:700;
+  color:var(--ivory);   /* 白に近いアイボリー */
+  line-height:1.5;margin-bottom:6px;
 }
 .e-desc{
-  font-size:.79rem;color:var(--muted);
-  line-height:1.8;
+  font-size:.82rem;
+  color:var(--body);    /* --body は #cec4b2 — 十分明るい */
+  line-height:1.85;
 }
 
-.e-side{
-  display:flex;flex-direction:column;
-  align-items:center;gap:8px;
-}
-.e-status{
-  font-size:.6rem;font-weight:700;letter-spacing:.1em;
-  padding:2px 9px;border-radius:3px;text-align:center;
-  white-space:nowrap;
-}
-.e-status.open{background:var(--green-ok);color:var(--green-txt);}
-.e-status.soon{background:rgba(232,224,210,.07);color:var(--muted);}
-
+.e-side{display:flex;flex-direction:column;align-items:center;gap:8px;}
+.e-status{font-size:.6rem;font-weight:700;letter-spacing:.1em;padding:3px 9px;border-radius:3px;white-space:nowrap;}
+.e-status.open{background:var(--green-bg);color:var(--green);}
+.e-status.soon{background:var(--mono-bg);color:var(--sub);}
 .e-btn{
-  appearance:none;
-  border:1px solid var(--gold-border);
-  background:transparent;
-  color:var(--gold);
-  font-size:.71rem;font-weight:700;letter-spacing:.12em;
-  padding:9px 18px;border-radius:3px;
-  white-space:nowrap;
-  pointer-events:none;
-  transition:background .18s,box-shadow .18s,border-color .18s;
+  border:1px solid var(--gold-border);background:transparent;color:var(--gold);
+  font-size:.71rem;font-weight:700;letter-spacing:.1em;
+  padding:9px 16px;border-radius:3px;white-space:nowrap;pointer-events:none;
+  transition:background .18s,box-shadow .18s;
 }
-.entry.link:hover .e-btn{
-  background:rgba(201,169,110,.12);
-  box-shadow:0 0 14px rgba(201,169,110,.15);
-  border-color:rgba(201,169,110,.45);
-}
-.e-seal{font-size:1.5rem;opacity:.3;line-height:1;}
+a.entry:hover .e-btn{background:rgba(212,176,106,.12);box-shadow:0 0 14px rgba(212,176,106,.15);border-color:var(--gold-hover);}
+.e-seal{font-size:1.4rem;opacity:.3;line-height:1;}
 
 @media(max-width:500px){
   .entry{grid-template-columns:1fr;}
@@ -332,22 +205,14 @@ body::before{
   .tb-back{display:none;}
 }
 
-/* ── FOOTER ── */
+/* ─── FOOTER ─── */
 .ft{
-  border-top:1px solid var(--gold-border);
-  padding-top:24px;
-  display:flex;flex-wrap:wrap;
-  align-items:center;justify-content:space-between;
-  gap:12px;
-  margin-bottom:12px;
+  border-top:1px solid var(--line);padding-top:24px;
+  display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:12px;
 }
-.ft-note{font-size:.72rem;color:var(--muted);line-height:1.75;}
-.ft-note strong{color:var(--gold);font-weight:700;}
-.ft-link{
-  font-size:.71rem;color:var(--muted);
-  display:flex;align-items:center;gap:5px;
-  transition:color .18s;
-}
+.ft-note{font-size:.72rem;color:var(--sub);line-height:1.7;}
+.ft-note strong{color:var(--gold);}
+.ft-link{font-size:.71rem;color:var(--sub);display:flex;align-items:center;gap:5px;transition:color .18s;}
 .ft-link:hover{color:var(--ivory);}
 
 .hidden{display:none!important}
@@ -355,58 +220,59 @@ body::before{
 </head>
 <body>
 
-<canvas id="starsBg"></canvas>
+<canvas id="sky"></canvas>
 
-<!-- ── SPLASH ── -->
+<!-- 月デコ（右上） -->
+<svg class="moon" viewBox="0 0 44 44" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <path d="M30 8C22.8 8 17 14.3 17 22C17 29.7 22.8 36 30 36C26.4 36 19.5 32.4 16 25.5C12.5 18.6 14.2 9.8 21 6.2C23.8 4.7 26.9 4.2 30 4.2V8Z" fill="#d4b06a"/>
+</svg>
+
+<!-- ─── SPLASH ─── -->
 <div id="spl" class="spl">
-  <div class="spl-ring">
-    <span class="spl-icon">🕯</span>
-  </div>
-  <div class="spl-eyebrow">Secret Archive</div>
+  <div class="spl-moon">🌙</div>
+  <div class="spl-eyebrow">Study &amp; Notes</div>
   <div class="spl-h">禁書の部屋<span class="spl-beta">β</span></div>
-  <p class="spl-copy">ここは、表に出すには少し早い知識の置き場所。
-物理の法則、思考の記録、制作の裏側——
-まだ整理されていないものたちが眠っている。</p>
-  <button class="spl-btn" id="splBtn" tabindex="0">扉を開く</button>
+  <p class="spl-copy">調べたこと、考えたこと、整理したこと。
+まだ公開するほどでもないかもしれないけど、
+どこかに残しておきたいものたちの場所。</p>
+  <button class="spl-btn" id="splBtn">入室する</button>
   <div class="spl-hint">TAP TO ENTER</div>
 </div>
 
-<!-- ── MAIN ── -->
+<!-- ─── MAIN ─── -->
 <div id="main" class="wrap hidden">
 
   <header class="topbar">
     <div>
       <div class="tb-eyebrow">Kinshono Heya</div>
       <div class="tb-name">禁書の部屋<span class="tb-beta">β</span></div>
-      <div class="tb-sub">秘密の書庫 ── 表に出ない知識の断片たち</div>
+      <div class="tb-sub">🌙&thinsp; 勉強と思考の記録</div>
     </div>
     <a href="/shindan/" class="tb-back">← 心の標本</a>
   </header>
 
-  <!-- 収蔵目録 -->
   <div class="sec-h">
-    <span class="sec-h-text">収蔵目録</span>
+    <span class="sec-h-text">記事</span>
     <div class="sec-h-line"></div>
   </div>
 
   <div class="catalog">
-    <a href="law-of-inertia.html" class="entry link">
+    <a href="law-of-inertia.html" class="entry">
       <div class="e-inner">
         <div class="e-meta">
-          <span class="e-no">No.001</span>
+          <span class="e-date">2025.05</span>
           <span class="e-tag phys">物理</span>
         </div>
-        <div class="e-title">電車内でスマホを上に投げるとどう見えるか</div>
-        <div class="e-desc">慣性の法則と参照系の話。「何を基準に静止しているか」という問いを、インタラクティブなシミュレーションで確認する。一般ケースと特殊ケースの違いを操作しながら見比べられる。</div>
+        <div class="e-title">電車の中でスマホを投げたらどう見える？</div>
+        <div class="e-desc">慣性と参照系の話。車内から見た軌道と地面から見た軌道は、なぜ違って見えるのか。スライダーで速度や高さを変えながら確認できるシミュレーション付き。</div>
       </div>
       <div class="e-side">
         <span class="e-status open">公開中</span>
-        <button class="e-btn" tabindex="-1">開く →</button>
+        <button class="e-btn" tabindex="-1">読む →</button>
       </div>
     </a>
   </div>
 
-  <!-- 準備中 -->
   <div class="sec-h">
     <span class="sec-h-text">準備中</span>
     <div class="sec-h-line"></div>
@@ -416,11 +282,10 @@ body::before{
     <div class="entry sealed">
       <div class="e-inner">
         <div class="e-meta">
-          <span class="e-no">No.002</span>
-          <span class="e-tag cbt">CBT</span>
+          <span class="e-tag cbt">CBT・心理</span>
         </div>
-        <div class="e-title">思考のログ</div>
-        <div class="e-desc">認知の歪みに気づいて、少しずつほぐしていくための日記。コラム法をベースにした、静かなセルフワーク。</div>
+        <div class="e-title">思考のログ ── 認知の歪みと戦う日記</div>
+        <div class="e-desc">コラム法ベースのセルフワーク日記。モヤっとした気持ちを書き出して、少しずつほぐしていく記録。</div>
       </div>
       <div class="e-side">
         <span class="e-seal">🔒</span>
@@ -431,11 +296,10 @@ body::before{
     <div class="entry sealed">
       <div class="e-inner">
         <div class="e-meta">
-          <span class="e-no">No.003</span>
-          <span class="e-tag meta">制作</span>
+          <span class="e-tag meta">制作メモ</span>
         </div>
-        <div class="e-title">サイトの裏側</div>
-        <div class="e-desc">心の標本がどうやって作られているか。没デザイン、思考の過程、失敗の記録——公開するには少し恥ずかしいものたち。</div>
+        <div class="e-title">心の標本の作り方</div>
+        <div class="e-desc">どんなふうに設計して、どこで詰まって、何度やり直したか。没デザインや失敗の記録も含めた制作の裏側。</div>
       </div>
       <div class="e-side">
         <span class="e-seal">🔒</span>
@@ -445,78 +309,58 @@ body::before{
   </div>
 
   <footer class="ft">
-    <div class="ft-note">
-      <strong>禁書の部屋</strong>はβ版です。内容は予告なく変更・削除される場合があります。
-    </div>
+    <div class="ft-note"><strong>禁書の部屋</strong>はβ版。内容は予告なく変わります。</div>
     <a href="/shindan/" class="ft-link">← 心の標本に戻る</a>
   </footer>
 
-</div><!-- /wrap -->
+</div>
 
 <script>
 (function(){
 'use strict';
 
-/* ── STARS ── */
-var C=document.getElementById('starsBg');
-var X=C.getContext('2d');
-var S=[];
+/* 星 */
+var C=document.getElementById('sky'),X=C.getContext('2d'),S=[];
 function rsz(){C.width=innerWidth;C.height=innerHeight;}
 function initS(){
   S=[];
-  var n=Math.floor(C.width*C.height/5500);
-  for(var i=0;i<n;i++){
-    S.push({
-      x:Math.random()*C.width,
-      y:Math.random()*C.height,
-      r:Math.random()*1.1+0.15,
-      a:Math.random()*0.7+0.05,
-      da:(Math.random()-.5)*0.0025
-    });
-  }
+  var n=Math.floor(C.width*C.height/4800);
+  for(var i=0;i<n;i++)S.push({
+    x:Math.random()*C.width,y:Math.random()*C.height,
+    r:Math.random()*1.1+.14,a:Math.random()*.65+.06,
+    da:(Math.random()-.5)*.002
+  });
 }
 function drawS(){
   X.clearRect(0,0,C.width,C.height);
   for(var i=0;i<S.length;i++){
-    var s=S[i];
-    s.a+=s.da;
-    if(s.a<0.04)s.da=Math.abs(s.da);
-    if(s.a>0.75)s.da=-Math.abs(s.da);
-    X.beginPath();
-    X.arc(s.x,s.y,s.r,0,Math.PI*2);
-    X.fillStyle='rgba(232,224,210,'+s.a+')';
-    X.fill();
+    var s=S[i];s.a+=s.da;
+    if(s.a<.04)s.da=Math.abs(s.da);
+    if(s.a>.72)s.da=-Math.abs(s.da);
+    X.beginPath();X.arc(s.x,s.y,s.r,0,Math.PI*2);
+    X.fillStyle='rgba(240,232,216,'+s.a.toFixed(2)+')';X.fill();
   }
   requestAnimationFrame(drawS);
 }
 rsz();initS();drawS();
 window.addEventListener('resize',function(){rsz();initS();},{passive:true});
 
-/* ── SPLASH ── */
-var spl=document.getElementById('spl');
-var main=document.getElementById('main');
-var opened=false;
+/* スプラッシュ */
+var spl=document.getElementById('spl'),main=document.getElementById('main'),opened=false;
 function openRoom(){
   if(opened)return;opened=true;
-  spl.style.opacity='0';
-  spl.style.pointerEvents='none';
+  spl.style.opacity='0';spl.style.pointerEvents='none';
   setTimeout(function(){spl.style.display='none';},580);
   main.classList.remove('hidden');
-  requestAnimationFrame(function(){
-    requestAnimationFrame(function(){main.classList.add('show');});
-  });
+  requestAnimationFrame(function(){requestAnimationFrame(function(){main.classList.add('show');});});
 }
-/* ボタン直打ち */
 var btn=document.getElementById('splBtn');
 if(btn){
   btn.addEventListener('click',function(e){e.stopPropagation();openRoom();});
   btn.addEventListener('touchend',function(e){e.preventDefault();e.stopPropagation();openRoom();});
 }
-/* 背景タップでも開く */
 spl.addEventListener('click',openRoom,{passive:true});
-document.addEventListener('keydown',function(e){
-  if((e.key==='Enter'||e.key===' ')&&!opened){openRoom();}
-});
+document.addEventListener('keydown',function(e){if(!opened&&(e.key==='Enter'||e.key===' '))openRoom();});
 
 })();
 </script>
