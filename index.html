@@ -78,7 +78,7 @@ body::before{
   font-size:.44em;font-weight:900;letter-spacing:.14em;
   color:#fff;background:var(--beta-bg);
   border:1px solid rgba(210,78,78,.48);
-  padding:2px 7px;border-radius:3px;text-transform:uppercase;
+  padding:2px 7px;border-radius:3px;
 }
 .spl-copy{font-size:.86rem;color:var(--sub);line-height:2;max-width:300px;white-space:pre-line;}
 .spl-btn{
@@ -118,6 +118,9 @@ body::before{
 .tb-eyebrow::before{content:"";width:16px;height:1px;background:rgba(212,176,106,.4);}
 .tb-name{
   font-size:clamp(1.9rem,5.5vw,3rem);font-weight:900;letter-spacing:.08em;line-height:1;
+  display:flex;align-items:center;gap:10px;
+}
+.tb-name-text{
   background:linear-gradient(110deg,var(--ivory) 0%,var(--gold) 38%,var(--ivory) 68%,#c8ad86 100%);
   background-size:230% 100%;
   -webkit-background-clip:text;background-clip:text;color:transparent;
@@ -128,24 +131,48 @@ body::before{
   display:inline-block;vertical-align:middle;margin-left:5px;
   font-size:.44em;font-weight:900;letter-spacing:.14em;
   color:#fff;background:var(--beta-bg);border:1px solid rgba(210,78,78,.42);
-  padding:2px 6px;border-radius:3px;text-transform:uppercase;
+  padding:2px 6px;border-radius:3px;
 }
 .tb-sub{font-size:.76rem;color:var(--sub);margin-top:7px;letter-spacing:.03em;}
 .tb-back{
-  font-size:.72rem;color:var(--sub);
-  display:flex;align-items:center;gap:5px;
-  border:1px solid rgba(240,232,216,.1);padding:8px 14px;border-radius:4px;
-  flex-shrink:0;white-space:nowrap;transition:color .2s,border-color .2s;
+  font-size:.76rem;
+  font-weight:700;
+  letter-spacing:.08em;
+  color:#07060f;
+  display:inline-flex;
+  align-items:center;
+  gap:7px;
+  border:1px solid var(--gold-hover);
+  padding:10px 16px;
+  border-radius:999px;
+  background:linear-gradient(135deg,var(--gold),#f0d48a);
+  box-shadow:0 0 22px rgba(212,176,106,.18);
+  flex-shrink:0;
+  white-space:nowrap;
+  transition:transform .18s,box-shadow .18s,filter .18s;
 }
-.tb-back:hover{color:var(--ivory);border-color:rgba(240,232,216,.24);}
+.tb-back:hover{
+  color:#07060f;
+  transform:translateY(-1px);
+  filter:brightness(1.06);
+  box-shadow:0 0 30px rgba(212,176,106,.28);
+}
 
 /* ─── SECTION HEADING ─── */
 .sec-h{display:flex;align-items:center;gap:14px;margin-bottom:20px;}
 .sec-h-text{
-  font-size:.63rem;font-weight:700;letter-spacing:.38em;
-  color:var(--gold);opacity:.7;text-transform:uppercase;white-space:nowrap;
+  font-size:.72rem;font-weight:700;letter-spacing:.06em;
+  color:var(--gold);opacity:.8;white-space:nowrap;
 }
 .sec-h-line{flex:1;height:1px;background:linear-gradient(90deg,var(--line),transparent);}
+
+.section-note{
+  margin:-8px 0 18px;
+  font-size:.8rem;
+  color:var(--sub);
+  line-height:1.9;
+}
+.section-note strong{color:var(--gold);}
 
 /* ─── ENTRY ─── */
 .catalog{display:flex;flex-direction:column;gap:14px;margin-bottom:52px;}
@@ -200,9 +227,10 @@ a.entry:hover .e-btn{background:rgba(212,176,106,.12);box-shadow:0 0 14px rgba(2
 .e-seal{font-size:1.4rem;opacity:.3;line-height:1;}
 
 @media(max-width:500px){
+  .topbar{align-items:flex-start;flex-direction:column;gap:16px;}
   .entry{grid-template-columns:1fr;}
   .e-side{flex-direction:row;justify-content:flex-end;}
-  .tb-back{display:none;}
+  .tb-back{display:inline-flex;}
 }
 
 /* ─── FOOTER ─── */
@@ -216,6 +244,157 @@ a.entry:hover .e-btn{background:rgba(212,176,106,.12);box-shadow:0 0 14px rgba(2
 .ft-link:hover{color:var(--ivory);}
 
 .hidden{display:none!important}
+
+/* ─── Q バッジ ─── */
+.e-tag.q{background:rgba(212,176,106,.16);color:var(--gold);}
+
+/* ─── 質問募集バナー ─── */
+.qa-recruit{
+  margin-top:6px;margin-bottom:52px;
+  border:1px solid var(--gold-border);
+  border-radius:10px;
+  padding:20px 22px;
+  background:rgba(212,176,106,.04);
+  position:relative;
+  overflow:hidden;
+}
+.qa-recruit::before{
+  content:"";position:absolute;
+  top:0;left:18px;right:18px;height:1px;
+  background:linear-gradient(90deg,transparent,rgba(212,176,106,.22),transparent);
+}
+.qa-recruit-head{
+  display:flex;align-items:center;gap:10px;
+  margin-bottom:10px;
+}
+.qa-recruit-icon{font-size:1.3rem;line-height:1;}
+.qa-recruit-title{
+  font-size:.9rem;font-weight:700;
+  color:var(--ivory);letter-spacing:.02em;
+}
+.qa-recruit-body{
+  font-size:.81rem;color:var(--body);
+  line-height:1.85;margin-bottom:16px;
+}
+.qa-recruit-body em{
+  font-style:normal;color:var(--gold);font-weight:700;
+}
+.qa-recruit-link{
+  display:inline-flex;align-items:center;gap:7px;
+  font-size:.78rem;font-weight:700;letter-spacing:.1em;
+  color:var(--gold);
+  border:1px solid var(--gold-border);
+  padding:9px 20px;border-radius:3px;
+  background:rgba(212,176,106,.07);
+  transition:background .2s,border-color .2s,box-shadow .2s;
+}
+.qa-recruit-link:hover{
+  background:rgba(212,176,106,.14);border-color:var(--gold-hover);
+  box-shadow:0 0 18px rgba(212,176,106,.14);
+}
+
+/* ─── 禁書の部屋内フォーム ─── */
+.kinsho-form-wrap{
+  margin-top:18px;
+  border:1px solid var(--gold-border);
+  border-radius:12px;
+  background:rgba(255,255,255,.035);
+  padding:18px 18px 16px;
+}
+.kinsho-form{
+  display:grid;
+  gap:12px;
+}
+.kinsho-form label{
+  display:grid;
+  gap:6px;
+  font-size:.72rem;
+  font-weight:700;
+  color:var(--gold);
+  letter-spacing:.04em;
+}
+.kinsho-form input,
+.kinsho-form select,
+.kinsho-form textarea{
+  width:100%;
+  border:1px solid rgba(212,176,106,.22);
+  border-radius:7px;
+  background:rgba(7,6,15,.62);
+  color:var(--ivory);
+  padding:10px 11px;
+  font:inherit;
+  font-size:.86rem;
+  line-height:1.6;
+  outline:none;
+}
+.kinsho-form textarea{
+  min-height:132px;
+  resize:vertical;
+}
+.kinsho-form input:focus,
+.kinsho-form select:focus,
+.kinsho-form textarea:focus{
+  border-color:var(--gold-hover);
+  box-shadow:0 0 0 2px rgba(212,176,106,.12);
+}
+.kinsho-form ::placeholder{
+  color:rgba(206,196,178,.46);
+}
+.kinsho-submit{
+  margin-top:4px;
+  justify-self:start;
+  border:1px solid var(--gold-hover);
+  border-radius:999px;
+  background:linear-gradient(135deg,var(--gold),#f0d48a);
+  color:#07060f;
+  padding:10px 22px;
+  font-size:.82rem;
+  font-weight:900;
+  letter-spacing:.12em;
+  box-shadow:0 0 20px rgba(212,176,106,.16);
+}
+.kinsho-hint{
+  margin-top:2px;
+  color:var(--sub);
+  font-size:.7rem;
+  line-height:1.75;
+}
+
+/* ─── 右下固定：心の標本へ戻る ─── */
+.corner-back{
+  position:fixed;
+  right:18px;
+  bottom:max(18px,env(safe-area-inset-bottom));
+  z-index:60;
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  gap:7px;
+  min-height:44px;
+  padding:10px 18px;
+  border:1px solid var(--gold-hover);
+  border-radius:999px;
+  background:linear-gradient(135deg,var(--gold),#f0d48a);
+  color:#07060f;
+  font-size:.78rem;
+  font-weight:900;
+  letter-spacing:.08em;
+  box-shadow:0 10px 30px rgba(0,0,0,.38),0 0 24px rgba(212,176,106,.22);
+  transition:transform .18s,box-shadow .18s,filter .18s;
+}
+.corner-back:hover{
+  transform:translateY(-1px);
+  filter:brightness(1.06);
+  box-shadow:0 12px 36px rgba(0,0,0,.44),0 0 30px rgba(212,176,106,.3);
+}
+
+@media(max-width:500px){
+  .corner-back{
+    left:14px;
+    right:14px;
+    bottom:max(14px,env(safe-area-inset-bottom));
+  }
+}
 </style>
 </head>
 <body>
@@ -245,32 +424,86 @@ a.entry:hover .e-btn{background:rgba(212,176,106,.12);box-shadow:0 0 14px rgba(2
   <header class="topbar">
     <div>
       <div class="tb-eyebrow">Kinshono Heya</div>
-      <div class="tb-name">禁書の部屋<span class="tb-beta">β</span></div>
+      <div class="tb-name"><span class="tb-name-text">禁書の部屋</span><span class="tb-beta">β</span></div>
       <div class="tb-sub">🌙&thinsp; 勉強と思考の記録</div>
     </div>
-    <a href="/shindan/" class="tb-back">← 心の標本</a>
+    
   </header>
 
   <div class="sec-h">
-    <span class="sec-h-text">記事</span>
+    <span class="sec-h-text">禁書の回答棚</span>
     <div class="sec-h-line"></div>
   </div>
+
+  <p class="section-note">
+    ここが<strong>禁書の部屋</strong>です。届いた疑問を、制作者の知識・調査・AIの補助で読み物にしていきます。β版なので、ページ構成や掲載内容は今後変わる場合があります。
+  </p>
 
   <div class="catalog">
     <a href="law-of-inertia.html" class="entry">
       <div class="e-inner">
         <div class="e-meta">
-          <span class="e-date">2025.05</span>
+          <span class="e-tag q">Q.</span>
           <span class="e-tag phys">物理</span>
+          <span class="e-date">2025.05</span>
         </div>
         <div class="e-title">電車の中でスマホを投げたらどう見える？</div>
-        <div class="e-desc">慣性と参照系の話。車内から見た軌道と地面から見た軌道は、なぜ違って見えるのか。スライダーで速度や高さを変えながら確認できるシミュレーション付き。</div>
+        <div class="e-desc">「電車内で真上に投げたら手元に戻ってくるのはなぜ？」という日常の疑問を出発点に、慣性と参照系を解説。車内視点と地面視点でなぜ軌道が違って見えるかをシミュレーターで確認できる。</div>
       </div>
       <div class="e-side">
         <span class="e-status open">公開中</span>
         <button class="e-btn" tabindex="-1">読む →</button>
       </div>
     </a>
+  </div>
+
+  <!-- 質問募集フォーム -->
+  <div class="qa-recruit" id="question-form">
+    <div class="qa-recruit-head">
+      <span class="qa-recruit-icon">💬</span>
+      <span class="qa-recruit-title">この部屋に質問を投げ込む</span>
+    </div>
+    <p class="qa-recruit-body">
+      日常のちょっとした疑問、気になっていたこと、誰かに聞きそびれていたこと——<br>
+      この禁書の部屋に投げ込めます。<br>
+      採用した質問は、匿名化したうえで、この部屋の回答棚に追加していきます。<br>
+      回答は制作者の知識・調査・AIの補助で作るため、公開後に修正・追記する場合があります。
+    </p>
+
+    <div class="kinsho-form-wrap">
+      <form class="kinsho-form" id="kinshoForm" action="https://formspree.io/f/mdkqgynb" method="POST">
+        <input type="hidden" name="source" value="kinsho-room">
+        <input type="hidden" name="_subject" value="禁書の部屋：質問・問い合わせ">
+
+        <label>お名前 / ニックネーム（任意）
+          <input type="text" name="name" autocomplete="name">
+        </label>
+
+        <label>連絡先（任意 / 返信希望時のみ）
+          <input type="email" name="email" inputmode="email" autocomplete="email">
+        </label>
+
+        <label>種別
+          <select name="type">
+            <option value="question">質問・調べてほしいこと</option>
+            <option value="correction">回答の訂正・補足</option>
+            <option value="request">この部屋で扱ってほしいテーマ</option>
+            <option value="impression">感想・ご意見</option>
+            <option value="bug">バグ報告</option>
+            <option value="other">その他</option>
+          </select>
+        </label>
+
+        <label>質問・メッセージ
+          <textarea name="message" required placeholder="例：電車の中でジャンプしても同じ場所に着地するのはなぜ？&#10;例：AIはなぜそれっぽい嘘をつくの？&#10;例：この回答、ここだけ少し気になった。"></textarea>
+        </label>
+
+        <button class="kinsho-submit" type="submit">禁書の部屋へ送る</button>
+        <p class="kinsho-hint">
+          ※ お名前・連絡先は空欄でも送信できます。すべての質問に回答できるとは限りません。掲載時は内容を匿名化・要約する場合があります。
+        </p>
+      </form>
+    </div>
   </div>
 
   <div class="sec-h">
@@ -309,11 +542,13 @@ a.entry:hover .e-btn{background:rgba(212,176,106,.12);box-shadow:0 0 14px rgba(2
   </div>
 
   <footer class="ft">
-    <div class="ft-note"><strong>禁書の部屋</strong>はβ版。内容は予告なく変わります。</div>
-    <a href="/shindan/" class="ft-link">← 心の標本に戻る</a>
+    <div class="ft-note"><strong>禁書の部屋</strong>はβ版。ページ構成・掲載内容・表現は予告なく変わる場合があります。</div>
+    
   </footer>
 
 </div>
+
+<a href="/shindan/" class="corner-back">心の標本に戻る</a>
 
 <script>
 (function(){
